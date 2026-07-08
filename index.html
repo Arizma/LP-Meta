@@ -1,19 +1,24 @@
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Konsultasi Prioritas Properti</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f4f6f9; color: #333; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .container { background: #ffffff; max-width: 450px; width: 100%; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h2 { font-size: 22px; color: #1a2a3a; margin-bottom: 10px; text-align: center; font-weight: 700; }
-        p.subtitle { text-align: center; color: #666; font-size: 14px; margin-bottom: 25px; line-height: 1.4; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-size: 13px; font-weight: 600; color: #4a5568; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-        input[type="text"], select { width: 100%; padding: 12px; border: 1.5px solid #cbd5e0; border-radius: 6px; font-size: 15px; color: #2d3748; transition: all 0.3s; background-color: #fff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; }
+        body { background-color: #f4f6f9; color: #333; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
+        .container { background: #ffffff; max-width: 100%; width: 420px; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
+        h2 { font-size: 20px; color: #1a2a3a; margin-bottom: 8px; text-align: center; font-weight: 700; }
+        p.subtitle { text-align: center; color: #666; font-size: 13px; margin-bottom: 22px; line-height: 1.4; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 11px; font-weight: 600; color: #4a5568; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        input[type="text"], select { width: 100%; padding: 12px; border: 1.5px solid #cbd5e0; border-radius: 6px; font-size: 15px; color: #2d3748; transition: all 0.3s; background-color: #fff; appearance: none; -webkit-appearance: none; }
         input[type="text"]:focus, select:focus { border-color: #3182ce; outline: none; box-shadow: 0 0 0 3px rgba(49,130,206,0.15); }
-        button { width: 100%; background-color: #25D366; color: white; border: none; padding: 14px; font-size: 16px; font-weight: 700; border-radius: 6px; cursor: pointer; transition: background 0.3s; margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        
+        /* Custom arrow drop-down di HP */
+        select { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M0 3l5 5 5-5z' fill='%234a5568'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 35px; }
+        
+        button { width: 100%; background-color: #25D366; color: white; border: none; padding: 14px; font-size: 15px; font-weight: 700; border-radius: 6px; cursor: pointer; transition: background 0.3s; margin-top: 10px; }
         button:hover { background-color: #128C7E; }
         .secure-note { text-align: center; font-size: 11px; color: #a0aec0; margin-top: 15px; }
     </style>
@@ -25,13 +30,11 @@
     <p class="subtitle">Isi data di bawah untuk mendapatkan Brosur Resmi, Pricelist, dan Jadwal Survei Eksklusif.</p>
     
     <form id="propertyForm" onsubmit="sendToWhatsapp(event)">
-        <!-- Input Nama -->
         <div class="form-group">
             <label for="nama">Nama Lengkap</label>
             <input type="text" id="nama" placeholder="Contoh: Ahmad Fauzi" required>
         </div>
 
-        <!-- Alokasi Budget -->
         <div class="form-group">
             <label for="budget">Estimasi Budget Pembelian</label>
             <select id="budget" required>
@@ -43,7 +46,6 @@
             </select>
         </div>
 
-        <!-- Metode Pembayaran -->
         <div class="form-group">
             <label for="metode">Rencana Metode Pembayaran</label>
             <select id="metode" required>
@@ -54,7 +56,6 @@
             </select>
         </div>
 
-        <!-- Timeline Pembelian -->
         <div class="form-group">
             <label for="timeline">Target Keputusan Pembelian</label>
             <select id="timeline" required>
@@ -65,7 +66,6 @@
             </select>
         </div>
 
-        <!-- Tombol submit ke WA -->
         <button type="submit">
             Dapatkan Brosur via WhatsApp
         </button>
@@ -78,25 +78,43 @@
 function sendToWhatsapp(event) {
     event.preventDefault();
     
-    // GANTI NOMOR INI dengan nomor WhatsApp bisnis lo (gunakan format internasional tanpa tanda +)
+    // Nomor WhatsApp lo (Sudah Terpasang)
     const nomorWA = "628170102779"; 
     
-    // Mengambil data dari form
+    // URL Web App Google Apps Script lo (Sudah Terpasang)
+    const urlGoogleScript = "https://script.google.com/macros/s/AKfycbzWZfpOvWnMeyzR0YetoB3is_1YIe_NGl2cgAyieuvMg9kSDRBdm7P4CahEipWgXtFW/exec"; 
+    
+    // Mengambil data inputan user
     const nama = document.getElementById('nama').value;
     const budget = document.getElementById('budget').value;
     const metode = document.getElementById('metode').value;
     const timeline = document.getElementById('timeline').value;
     
-    // Menyusun teks template untuk WhatsApp
-    const teks = `Halo Partner Investasi,%0A%0ASaya sudah mengisi data verifikasi:%0A%0A` +
+    // Teks cetakan untuk di-send ke WhatsApp
+    const teks = `Halo Partner Investasi,%0A%0ASaya sudah mengisi data verifikasi di Landing Page:%0A%0A` +
                  `• *Nama:* ${nama}%0A` +
                  `• *Budget:* ${budget}%0A` +
                  `• *Metode Bayar:* ${metode}%0A` +
                  `• *Target Pembelian:* ${timeline}%0A%0A` +
                  `Mohon kirimkan dokumen Pricelist dan sisa unit prioritasnya. Terima kasih.`;
-    
-    // Mengarahkan ke URL WhatsApp resmi
-    window.location.href = `https://api.whatsapp.com/send?phone=${nomorWA}&text=${teks}`;
+
+    // Bungkus data ke dalam format FormData
+    const formData = new FormData();
+    formData.append('nama', nama);
+    formData.append('budget', budget);
+    formData.append('metode', metode);
+    formData.append('timeline', timeline);
+
+    // Kirim data ke Google Sheets di background (Asynchronous)
+    fetch(urlGoogleScript, { method: 'POST', body: formData })
+    .then(response => {
+        // Sukses kirim ke sheet -> langsung lempar ke WA
+        window.location.href = `https://api.whatsapp.com/send?phone=${nomorWA}&text=${teks}`;
+    })
+    .catch(error => {
+        // Jika internet user lemot/gagal konek ke Google, tetep paksa lempar ke WA biar lead gak hilang
+        window.location.href = `https://api.whatsapp.com/send?phone=${nomorWA}&text=${teks}`;
+    });
 }
 </script>
 
