@@ -1,0 +1,105 @@
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kalkulator KPR Pro</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; }
+        body { background: #f4f6f9; padding: 15px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        
+        /* Boks dibuat fleksibel maksimal 420px, kalau di layar HP yang lebih kecil bakal otomatis menyesuaikan */
+        .box { max-width: 100%; width: 420px; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        
+        h2 { font-size: 18px; color: #1a2a3a; margin-bottom: 15px; text-align: center; font-weight: 700; }
+        .group { margin-bottom: 12px; }
+        label { font-size: 11px; font-weight: 600; color: #555; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+        
+        /* Ukuran font input 14px-16px ideal untuk layar HP agar teks langsung terbaca jelas */
+        input, select { width: 100%; padding: 10px; border: 1.5px solid #cbd5e0; border-radius: 6px; font-size: 14px; color: #2d3748; background: #fff; appearance: none; -webkit-appearance: none; }
+        input:focus, select:focus { border-color: #3182ce; outline: none; }
+        
+        /* Custom arrow untuk drop-down select di HP */
+        select { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M0 3l5 5 5-5z' fill='%234a5568'/></svg>"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; }
+        
+        .result { margin-top: 20px; padding: 15px; background: #2b6cb0; color: #fff; border-radius: 8px; text-align: center; }
+        .result span { font-size: 11px; opacity: 0.9; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+        .result h3 { margin-top: 2px; font-size: 22px; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Kalkulator KPR</h2>
+    
+    <div class="group">
+        <label>Harga Properti (Rp)</label>
+        <input type="text" id="hargaRaw" value="1.500.000.000" oninput="formatInput(this)">
+    </div>
+    <div class="group">
+        <label>DP (%)</label>
+        <input type="number" id="dpPercent" value="20" oninput="hitung()">
+    </div>
+    <div class="group">
+        <label>Tenor (Tahun)</label>
+        <input type="number" id="tenor" value="15" oninput="hitung()">
+    </div>
+    <div class="group">
+        <label>Skema Bunga</label>
+        <select id="skema" onchange="toggleBunga()">
+            <option value="flat">Bunga Flat (Fixed)</option>
+            <option value="stepup3">Step-Up (Fixed 3th)</option>
+            <option value="stepup5">Step-Up (Fixed 5th)</option>
+        </select>
+    </div>
+    <div class="group" id="bungaGroup">
+        <label>Suku Bunga Flat (% per tahun)</label>
+        <input type="number" id="bungaFlat" value="6.5" oninput="hitung()">
+    </div>
+
+    <div class="result">
+        <span>Estimasi Cicilan</span>
+        <h3 id="hasil">Rp 0</h3>
+    </div>
+</div>
+
+<script>
+function formatInput(el) {
+    let val = el.value.replace(/\D/g, "");
+    el.value = new Intl.NumberFormat('id-ID').format(val);
+    hitung();
+}
+
+function toggleBunga() {
+    document.getElementById('bungaGroup').style.display = (document.getElementById('skema').value === 'flat') ? 'block' : 'none';
+    hitung();
+}
+
+function hitung() {
+    const harga = parseFloat(document.getElementById('hargaRaw').value.replace(/\./g, "")) || 0;
+    const dpPercent = parseFloat(document.getElementById('dpPercent').value) || 0;
+    const tenor = parseInt(document.getElementById('tenor').value) || 0;
+    const skema = document.getElementById('skema').value;
+    
+    const P = harga - (harga * (dpPercent / 100));
+    const n = tenor * 12;
+    let cicilan = 0;
+
+    if (P > 0 && n > 0) {
+        if (skema === 'flat') {
+            const i = (document.getElementById('bungaFlat').value / 100) / 12;
+            if (i > 0) {
+                cicilan = (P * i * Math.pow(1 + i, n)) / (Math.pow(1 + i, n) - 1);
+            }
+        } else {
+            const iFixed = 0.065 / 12;
+            cicilan = (P * iFixed * Math.pow(1 + iFixed, n)) / (Math.pow(1 + iFixed, n) - 1);
+        }
+    }
+
+    document.getElementById('hasil').innerText = "Rp " + Math.round(cicilan).toLocaleString('id-ID') + " /bulan";
+}
+
+hitung();
+</script>
+</body>
+</html>
