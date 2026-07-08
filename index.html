@@ -1,0 +1,104 @@
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konsultasi Prioritas Properti</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f6f9; color: #333; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .container { background: #ffffff; max-width: 450px; width: 100%; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h2 { font-size: 22px; color: #1a2a3a; margin-bottom: 10px; text-align: center; font-weight: 700; }
+        p.subtitle { text-align: center; color: #666; font-size: 14px; margin-bottom: 25px; line-height: 1.4; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #4a5568; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        input[type="text"], select { width: 100%; padding: 12px; border: 1.5px solid #cbd5e0; border-radius: 6px; font-size: 15px; color: #2d3748; transition: all 0.3s; background-color: #fff; }
+        input[type="text"]:focus, select:focus { border-color: #3182ce; outline: none; box-shadow: 0 0 0 3px rgba(49,130,206,0.15); }
+        button { width: 100%; background-color: #25D366; color: white; border: none; padding: 14px; font-size: 16px; font-weight: 700; border-radius: 6px; cursor: pointer; transition: background 0.3s; margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        button:hover { background-color: #128C7E; }
+        .secure-note { text-align: center; font-size: 11px; color: #a0aec0; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Formulir Akses Prioritas</h2>
+    <p class="subtitle">Isi data di bawah untuk mendapatkan Brosur Resmi, Pricelist, dan Jadwal Survei Eksklusif.</p>
+    
+    <form id="propertyForm" onsubmit="sendToWhatsapp(event)">
+        <!-- Input Nama -->
+        <div class="form-group">
+            <label for="nama">Nama Lengkap</label>
+            <input type="text" id="nama" placeholder="Contoh: Ahmad Fauzi" required>
+        </div>
+
+        <!-- Alokasi Budget -->
+        <div class="form-group">
+            <label for="budget">Estimasi Budget Pembelian</label>
+            <select id="budget" required>
+                <option value="" disabled selected>Pilih Range Budget</option>
+                <option value="Di bawah 1 Miliar">Di bawah Rp 1 Miliar</option>
+                <option value="1 Miliar - 1.5 Miliar">Rp 1 Miliar - Rp 1.5 Miliar</option>
+                <option value="1.5 Miliar - 2.5 Miliar">Rp 1.5 Miliar - Rp 2.5 Miliar</option>
+                <option value="Di atas 2.5 Miliar">Di atas Rp 2.5 Miliar</option>
+            </select>
+        </div>
+
+        <!-- Metode Pembayaran -->
+        <div class="form-group">
+            <label for="metode">Rencana Metode Pembayaran</label>
+            <select id="metode" required>
+                <option value="" disabled selected>Pilih Metode</option>
+                <option value="KPR Express">KPR (Kredit Pemilikan Rumah)</option>
+                <option value="Cash Bertahap">Cash Bertahap ke Developer</option>
+                <option value="Cash Keras">Cash Keras / Lunasi Langsung</option>
+            </select>
+        </div>
+
+        <!-- Timeline Pembelian -->
+        <div class="form-group">
+            <label for="timeline">Target Keputusan Pembelian</label>
+            <select id="timeline" required>
+                <option value="" disabled selected>Pilih Waktu</option>
+                <option value="Bulan Ini (Urgensi Tinggi)">Bulan Ini (Siap Booking jika cocok)</option>
+                <option value="1 - 3 Bulan Ke Depan">1 - 3 Bulan Ke Depan</option>
+                <option value="Hanya Komparasi / Tahun Depan">Masih Lihat-lihat / Komparasi</option>
+            </select>
+        </div>
+
+        <!-- Tombol submit ke WA -->
+        <button type="submit">
+            Dapatkan Brosur via WhatsApp
+        </button>
+    </form>
+    
+    <p class="secure-note">🔒 Data Anda aman dan hanya digunakan untuk verifikasi internal instansi kami.</p>
+</div>
+
+<script>
+function sendToWhatsapp(event) {
+    event.preventDefault();
+    
+    // GANTI NOMOR INI dengan nomor WhatsApp bisnis lo (gunakan format internasional tanpa tanda +)
+    const nomorWA = "628170102779"; 
+    
+    // Mengambil data dari form
+    const nama = document.getElementById('nama').value;
+    const budget = document.getElementById('budget').value;
+    const metode = document.getElementById('metode').value;
+    const timeline = document.getElementById('timeline').value;
+    
+    // Menyusun teks template untuk WhatsApp
+    const teks = `Halo Partner Investasi,%0A%0ASaya sudah mengisi data verifikasi:%0A%0A` +
+                 `• *Nama:* ${nama}%0A` +
+                 `• *Budget:* ${budget}%0A` +
+                 `• *Metode Bayar:* ${metode}%0A` +
+                 `• *Target Pembelian:* ${timeline}%0A%0A` +
+                 `Mohon kirimkan dokumen Pricelist dan sisa unit prioritasnya. Terima kasih.`;
+    
+    // Mengarahkan ke URL WhatsApp resmi
+    window.location.href = `https://api.whatsapp.com/send?phone=${nomorWA}&text=${teks}`;
+}
+</script>
+
+</body>
+</html>
