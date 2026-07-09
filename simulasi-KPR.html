@@ -1,105 +1,276 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kalkulator KPR Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator KPR Premium</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; }
-        body { background: #f4f6f9; padding: 15px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        
-        /* Boks dibuat fleksibel maksimal 420px, kalau di layar HP yang lebih kecil bakal otomatis menyesuaikan */
-        .box { max-width: 100%; width: 420px; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        
-        h2 { font-size: 18px; color: #1a2a3a; margin-bottom: 15px; text-align: center; font-weight: 700; }
-        .group { margin-bottom: 12px; }
-        label { font-size: 11px; font-weight: 600; color: #555; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
-        
-        /* Ukuran font input 14px-16px ideal untuk layar HP agar teks langsung terbaca jelas */
-        input, select { width: 100%; padding: 10px; border: 1.5px solid #cbd5e0; border-radius: 6px; font-size: 14px; color: #2d3748; background: #fff; appearance: none; -webkit-appearance: none; }
-        input:focus, select:focus { border-color: #3182ce; outline: none; }
-        
-        /* Custom arrow untuk drop-down select di HP */
-        select { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M0 3l5 5 5-5z' fill='%234a5568'/></svg>"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; }
-        
-        .result { margin-top: 20px; padding: 15px; background: #2b6cb0; color: #fff; border-radius: 8px; text-align: center; }
-        .result span { font-size: 11px; opacity: 0.9; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
-        .result h3 { margin-top: 2px; font-size: 22px; font-weight: 700; }
+        .text-premium-title { color: #1e3a8a; } 
+        .input-premium {
+            font-size: 1.15rem !important;
+            padding: 1rem !important;
+            border: 2px solid #cbd5e1 !important;
+            font-weight: 700 !important;
+        }
+        .input-premium:focus {
+            border-color: #2563eb !important;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2) !important;
+        }
+        .label-premium {
+            font-size: 0.95rem !important;
+            font-weight: 800 !important;
+            color: #334155 !important;
+            margin-bottom: 0.5rem !important;
+            display: block;
+        }
     </style>
 </head>
-<body>
+<body class="bg-gray-100 font-sans antialiased p-4 sm:p-6">
 
-<div class="box">
-    <h2>Kalkulator KPR</h2>
-    
-    <div class="group">
-        <label>Harga Properti (Rp)</label>
-        <input type="text" id="hargaRaw" value="1.500.000.000" oninput="formatInput(this)">
-    </div>
-    <div class="group">
-        <label>DP (%)</label>
-        <input type="number" id="dpPercent" value="20" oninput="hitung()">
-    </div>
-    <div class="group">
-        <label>Tenor (Tahun)</label>
-        <input type="number" id="tenor" value="15" oninput="hitung()">
-    </div>
-    <div class="group">
-        <label>Skema Bunga</label>
-        <select id="skema" onchange="toggleBunga()">
-            <option value="flat">Bunga Flat (Fixed)</option>
-            <option value="stepup3">Step-Up (Fixed 3th)</option>
-            <option value="stepup5">Step-Up (Fixed 5th)</option>
-        </select>
-    </div>
-    <div class="group" id="bungaGroup">
-        <label>Suku Bunga Flat (% per tahun)</label>
-        <input type="number" id="bungaFlat" value="6.5" oninput="hitung()">
+    <div class="max-w-2xl mx-auto my-4 bg-white p-6 sm:p-10 rounded-3xl shadow-2xl border-2 border-gray-100">
+        <div class="text-center mb-8 border-b-2 border-gray-100 pb-6">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-premium-title tracking-tight">🧮 KALKULATOR KPR</h1>
+            <p class="text-base font-bold text-gray-500 mt-2">Hitung Cepat Pokok, Bunga, & Denda Pelunasan Ekstra</p>
+        </div>
+        
+        <div class="space-y-6">
+            <div>
+                <label class="label-premium">💵 HARGA PROPERTI / RUMAH (Rp)</label>
+                <input type="text" id="hargaPropertiRaw" value="1.000.000.000" oninput="formatInputRupiah(this)" class="w-full input-premium rounded-2xl text-blue-700 text-2xl">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="label-premium">📉 UANG MUKA / DP (%)</label>
+                    <input type="number" id="persenDP" value="10" class="w-full input-premium rounded-2xl">
+                </div>
+                <div>
+                    <label class="label-premium">⏳ TOTAL TENOR (TAHUN)</label>
+                    <input type="number" id="tenor" value="20" class="w-full input-premium rounded-2xl">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="label-premium">📊 BUNGA DASAR (%)</label>
+                    <input type="number" id="sukuBunga" value="5.5" step="0.1" class="w-full input-premium rounded-2xl">
+                </div>
+                <div>
+                    <label class="label-premium">⚙️ SKEMA BUNGA</label>
+                    <select id="skemaBunga" onchange="aturTampilanMasaFixed()" class="w-full input-premium rounded-2xl bg-white">
+                        <option value="flat" selected>Fixed Flat (Tetap)</option>
+                        <option value="stepup">Fixed Step Up (Naik Berjenjang)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="kolomMasaFixed" class="hidden bg-blue-50 p-4 rounded-2xl border-2 border-blue-200">
+                <label class="label-premium text-blue-900">📌 PILIH MASA FIXED (TAHUN)</label>
+                <select id="masaFixed" class="w-full input-premium rounded-2xl bg-white text-blue-800">
+                    <option value="3">3 Tahun</option>
+                    <option value="5" selected>5 Tahun</option>
+                    <option value="7">7 Tahun</option>
+                </select>
+            </div>
+
+            <button onclick="hitungKPR()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black text-xl py-5 px-6 rounded-2xl transition duration-200 shadow-xl transform active:scale-95 tracking-wider uppercase">
+                🚀 HITUNG CICILAN SEKARANG
+            </button>
+        </div>
+
+        <div id="hasilSimulasi" class="mt-8 p-6 bg-blue-50 rounded-3xl hidden border-2 border-blue-200 space-y-6">
+            <h3 class="text-xl font-black text-blue-900 text-center tracking-wider border-b border-blue-200 pb-3 uppercase">📊 HASIL PERHITUNGAN BULANAN</h3>
+            
+            <div class="bg-white p-4 rounded-2xl shadow-sm space-y-3 text-base font-bold text-gray-700">
+                <div class="flex justify-between border-b pb-2">
+                    <span>Plafon Pinjaman Bank:</span>
+                    <span id="resPlafon" class="text-gray-950 text-lg">Rp 0</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Jenis Bunga Masa Fixed:</span>
+                    <span id="resSkemaInfo" class="text-blue-700 text-lg">5.5%</span>
+                </div>
+            </div>
+
+            <div class="bg-amber-100 p-5 rounded-2xl border-2 border-amber-300 space-y-3 shadow-sm">
+                <div class="flex justify-between items-center flex-wrap gap-2">
+                    <span class="font-black text-amber-950 text-base sm:text-lg">📉 TOTAL CICILAN FIXED :</span>
+                    <span id="resCicilanFixed" class="font-black text-blue-900 text-2xl sm:text-3xl block">Rp 0</span>
+                </div>
+                <div class="grid grid-cols-2 gap-4 pt-3 border-t-2 border-amber-200 text-sm font-bold text-gray-800">
+                    <div>Porsi Potong Utang (Pokok): <span id="resPokokFixed" class="font-black text-gray-950 text-lg block text-green-700">Rp 0</span></div>
+                    <div>Porsi Setor ke Bank (Bunga): <span id="resBungaFixed" class="font-black text-gray-950 text-lg block text-red-600">Rp 0</span></div>
+                </div>
+                <span id="resInfoFixed" class="text-xs text-amber-900 font-bold block italic bg-white p-2 rounded-xl border border-amber-200"></span>
+            </div>
+
+            <div class="bg-red-100 p-5 rounded-2xl border-2 border-red-300 space-y-3 shadow-sm">
+                <div class="flex justify-between items-center flex-wrap gap-2">
+                    <span class="font-black text-red-950 text-base sm:text-lg">📈 ESTIMASI CICILAN FLOATING :</span>
+                    <span id="resCicilanFloating" class="font-black text-red-800 text-2xl sm:text-3xl block">Rp 0</span>
+                </div>
+                <div class="grid grid-cols-2 gap-4 pt-3 border-t-2 border-red-200 text-sm font-bold text-gray-800">
+                    <div>Porsi Potong Utang (Pokok): <span id="resPokokFloating" class="font-black text-gray-950 text-base block">Rp 0</span></div>
+                    <div>Porsi Setor ke Bank (Bunga): <span id="resBungaFloating" class="font-black text-gray-950 text-base block">Rp 0</span></div>
+                </div>
+                <span class="text-xs text-red-950 font-bold block bg-white p-2 rounded-xl border border-red-200 italic">*Asumsi suku bunga floating pasar naik 3% setelah masa fixed berakhir.</span>
+            </div>
+
+            <div class="bg-gray-900 text-white p-6 rounded-3xl space-y-4 shadow-xl border-2 border-gray-700">
+                <h4 class="text-base font-black text-yellow-400 tracking-wider uppercase border-b border-gray-800 pb-2">💰 PELUNASAN EKSTRA / DANA DADAKAN</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Bayar Ekstra Pokok (Rp)</label>
+                        <input type="text" id="extraBayarRaw" value="50.000.000" oninput="formatInputRupiah(this)" class="w-full p-3 bg-gray-800 border-2 border-gray-700 rounded-xl text-yellow-400 font-black text-xl focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Denda Penalti Bank (%)</label>
+                        <input type="number" id="persenPenalti" value="1" step="0.1" class="w-full p-3 bg-gray-800 border-2 border-gray-700 rounded-xl text-white font-black text-xl focus:outline-none">
+                    </div>
+                </div>
+                <button onclick="hitungPenalti()" class="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-950 font-black text-base py-3 px-4 rounded-xl transition duration-150 tracking-wide uppercase">
+                    🧮 HITUNG DENDA PENALTI & SISA UTANG
+                </button>
+                <div id="boxHasilPenalti" class="hidden border-t-2 border-gray-800 pt-4 text-base font-bold space-y-2">
+                    <div class="flex justify-between bg-gray-800 p-3 rounded-xl border border-red-900/50">
+                        <span class="text-gray-400">🚨 Denda Penalti Bank:</span>
+                        <span id="resDendaPenalti" class="font-black text-red-400 text-lg">Rp 0</span>
+                    </div>
+                    <div class="flex justify-between bg-gray-800 p-3 rounded-xl border border-green-900/50">
+                        <span class="text-gray-400">✅ Sisa Pokok Utang KPR Baru:</span>
+                        <span id="resSisaKPR" class="font-black text-green-400 text-lg">Rp 0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="result">
-        <span>Estimasi Cicilan</span>
-        <h3 id="hasil">Rp 0</h3>
-    </div>
-</div>
-
-<script>
-function formatInput(el) {
-    let val = el.value.replace(/\D/g, "");
-    el.value = new Intl.NumberFormat('id-ID').format(val);
-    hitung();
-}
-
-function toggleBunga() {
-    document.getElementById('bungaGroup').style.display = (document.getElementById('skema').value === 'flat') ? 'block' : 'none';
-    hitung();
-}
-
-function hitung() {
-    const harga = parseFloat(document.getElementById('hargaRaw').value.replace(/\./g, "")) || 0;
-    const dpPercent = parseFloat(document.getElementById('dpPercent').value) || 0;
-    const tenor = parseInt(document.getElementById('tenor').value) || 0;
-    const skema = document.getElementById('skema').value;
-    
-    const P = harga - (harga * (dpPercent / 100));
-    const n = tenor * 12;
-    let cicilan = 0;
-
-    if (P > 0 && n > 0) {
-        if (skema === 'flat') {
-            const i = (document.getElementById('bungaFlat').value / 100) / 12;
-            if (i > 0) {
-                cicilan = (P * i * Math.pow(1 + i, n)) / (Math.pow(1 + i, n) - 1);
+    <script>
+        function aturTampilanMasaFixed() {
+            const skema = document.getElementById('skemaBunga').value;
+            const kolomMasaFixed = document.getElementById('kolomMasaFixed');
+            
+            if (skema === 'stepup') {
+                kolomMasaFixed.classList.remove('hidden'); 
+            } else {
+                kolomMasaFixed.classList.add('hidden');    
             }
-        } else {
-            const iFixed = 0.065 / 12;
-            cicilan = (P * iFixed * Math.pow(1 + iFixed, n)) / (Math.pow(1 + iFixed, n) - 1);
         }
-    }
 
-    document.getElementById('hasil').innerText = "Rp " + Math.round(cicilan).toLocaleString('id-ID') + " /bulan";
-}
+        function formatInputRupiah(input) {
+            let value = input.value.replace(/[^0-9]/g, "");
+            if (value === "") { input.value = ""; return; }
+            input.value = parseInt(value).toLocaleString('id-ID');
+        }
 
-hitung();
-</script>
+        function cleanRupiahValue(string) {
+            return parseFloat(string.replace(/\./g, "")) || 0;
+        }
+
+        function formatRupiah(angka) {
+            return "Rp " + Math.round(angka).toLocaleString('id-ID');
+        }
+
+        let globalPlafon = 0;
+
+        function hitungKPR() {
+            const harga = cleanRupiahValue(document.getElementById('hargaPropertiRaw').value);
+            const persenDP = parseFloat(document.getElementById('persenDP').value);
+            const bungaDasar = parseFloat(document.getElementById('sukuBunga').value);
+            const skema = document.getElementById('skemaBunga').value;
+            const tenorThn = parseInt(document.getElementById('tenor').value);
+            
+            let masaFixedThn = 5; 
+
+            if (skema === "stepup") {
+                masaFixedThn = parseInt(document.getElementById('masaFixed').value);
+            }
+
+            if (tenorThn <= masaFixedThn) {
+                alert("⚠️ Error: Total Tenor KPR harus lebih lama dari Masa Fixed Bunga!");
+                return;
+            }
+
+            const nilaiDP = harga * (persenDP / 100);
+            const plafon = harga - nilaiDP;
+            globalPlafon = plafon; 
+            
+            const totalBulanTenor = tenorThn * 12;
+            let cicilanFixed = 0;
+            let bungaBulanFixed = 0;
+            let bungaEfektifMasaFixed = bungaDasar;
+
+            if (skema === "flat") {
+                bungaBulanFixed = (bungaDasar / 100) / 12;
+                cicilanFixed = (plafon * bungaBulanFixed) / (1 - Math.pow(1 + bungaBulanFixed, -totalBulanTenor));
+                document.getElementById('resSkemaInfo').innerText = "Fixed Flat " + bungaDasar + "% per Tahun";
+                document.getElementById('resInfoFixed').innerText = "💡 Nilai angsuran bulanan Anda aman dan STABIL flat sepanjang tenor fixed.";
+            } else if (skema === "stepup") {
+                if (masaFixedThn === 3) bungaEfektifMasaFixed = bungaDasar + 0.5;
+                else if (masaFixedThn === 5) bungaEfektifMasaFixed = bungaDasar + 1.0;
+                else if (masaFixedThn === 7) bungaEfektifMasaFixed = bungaDasar + 1.5;
+                
+                bungaBulanFixed = (bungaEfektifMasaFixed / 100) / 12;
+                cicilanFixed = (plafon * bungaBulanFixed) / (1 - Math.pow(1 + bungaBulanFixed, -totalBulanTenor));
+                document.getElementById('resSkemaInfo').innerText = "Fixed Step Up (Rata-rata: " + bungaEfektifMasaFixed + "%)";
+                document.getElementById('resInfoFixed').innerText = "💡 Menggunakan skema berjenjang naik. Angka di atas merupakan estimasi rata-rata pembayaran Anda selama " + masaFixedThn + " tahun pertama.";
+            }
+
+            // FIX BUG DI SINI: Variabel penampung diatur ulang agar tidak menghentikan fungsi
+            const hitungBungaFixed = plafon * bungaBulanFixed;
+            const hitungPokokFixed = cicilanFixed - hitungBungaFixed;
+
+            let sisaPokok = plafon;
+            const bulanFixed = masaFixedThn * 12;
+            for (let i = 0; i < bulanFixed; i++) {
+                let b = sisaPokok * bungaBulanFixed;
+                let p = cicilanFixed - b;
+                sisaPokok -= p;
+            }
+
+            const bungaAnualFloating = bungaEfektifMasaFixed + 3;
+            const bungaBulanFloating = (bungaAnualFloating / 100) / 12;
+            const sisaBulanTenor = (tenorThn - masaFixedThn) * 12;
+            const cicilanFloating = (sisaPokok * bungaBulanFloating) / (1 - Math.pow(1 + bungaBulanFloating, -sisaBulanTenor));
+
+            const hitungBungaFloating = sisaPokok * bungaBulanFloating;
+            const hitungPokokFloating = cicilanFloating - hitungBungaFloating;
+
+            document.getElementById('resPlafon').innerText = formatRupiah(plafon);
+            
+            document.getElementById('resCicilanFixed').innerText = formatRupiah(cicilanFixed) + " / bln";
+            document.getElementById('resPokokFixed').innerText = formatRupiah(hitungPokokFixed);
+            document.getElementById('resBungaFixed').innerText = formatRupiah(hitungBungaFixed);
+
+            document.getElementById('resCicilanFloating').innerText = formatRupiah(cicilanFloating) + " / bln";
+            document.getElementById('resBungaFloating').innerText = formatRupiah(hitungBungaFloating);
+            document.getElementById('resPokokFloating').innerText = formatRupiah(hitungPokokFloating);
+
+            document.getElementById('hasilSimulasi').classList.remove('hidden');
+            document.getElementById('boxHasilPenalti').classList.add('hidden'); 
+        }
+
+        function hitungPenalti() {
+            const danaEkstra = cleanRupiahValue(document.getElementById('extraBayarRaw').value);
+            const persenPenalti = parseFloat(document.getElementById('persenPenalti').value) / 100;
+
+            if (globalPlafon === 0) {
+                alert("⚠️ Silahkan klik tombol 'HITUNG CICILAN SEKARANG' terlebih dahulu!");
+                return;
+            }
+
+            if (danaEkstra >= globalPlafon) {
+                alert("⚠️ Error: Pembayaran ekstra tidak boleh melebihi sisa plafon pinjaman Anda.");
+                return;
+            }
+
+            const dendaPenalti = danaEkstra * persenPenalti;
+            const sisaPokokUtangBaru = globalPlafon - danaEkstra;
+
+            document.getElementById('resDendaPenalti').innerText = formatRupiah(dendaPenalti);
+            document.getElementById('resSisaKPR').innerText = formatRupiah(sisaPokokUtangBaru);
+            document.getElementById('boxHasilPenalti').classList.remove('hidden');
+        }
+    </script>
 </body>
 </html>
