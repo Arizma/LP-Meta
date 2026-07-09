@@ -4,114 +4,276 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Konsultasi Prioritas Properti</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; }
-        body { background-color: #f4f6f9; color: #333; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
-        .container { background: #ffffff; max-width: 100%; width: 420px; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
-        h2 { font-size: 20px; color: #1a2a3a; margin-bottom: 8px; text-align: center; font-weight: 700; }
-        p.subtitle { text-align: center; color: #666; font-size: 13px; margin-bottom: 22px; line-height: 1.4; }
-        .form-group { margin-bottom: 16px; }
-        label { display: block; font-size: 11px; font-weight: 600; color: #4a5568; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-        input[type="text"], select { width: 100%; padding: 12px; border: 1.5px solid #cbd5e0; border-radius: 6px; font-size: 15px; color: #2d3748; transition: all 0.3s; background-color: #fff; appearance: none; -webkit-appearance: none; }
-        input[type="text"]:focus, select:focus { border-color: #3182ce; outline: none; box-shadow: 0 0 0 3px rgba(49,130,206,0.15); }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; 
+        }
+        body { 
+            background-color: #f4f6f9; 
+            color: #333; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 15px; 
+        }
+        .container { 
+            background: #ffffff; 
+            max-width: 100%; 
+            width: 440px; 
+            padding: 30px 25px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+        }
+        h2 { 
+            font-size: 22px; 
+            color: #1a2a3a; 
+            margin-bottom: 6px; 
+            text-align: center; 
+            font-weight: 800; 
+            letter-spacing: -0.5px; 
+        }
+        p.subtitle { 
+            text-align: center; 
+            color: #64748b; 
+            font-size: 13px; 
+            margin-bottom: 24px; 
+            line-height: 1.5; 
+            font-weight: 500; 
+        }
+        .form-group { 
+            margin-bottom: 20px; 
+            position: relative; 
+        }
+        label { 
+            display: block; 
+            font-size: 11px; 
+            font-weight: 800; 
+            color: #1e293b; 
+            margin-bottom: 8px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.8px; 
+        }
         
-        /* Custom arrow drop-down di HP */
-        select { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M0 3l5 5 5-5z' fill='%234a5568'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 35px; }
+        /* CARD SELECTION STYLE */
+        .card-selector { 
+            display: grid; 
+            grid-template-columns: 1fr; 
+            gap: 8px; 
+        }
+        .card-option { 
+            padding: 14px 16px; 
+            border: 2px solid #e2e8f0; 
+            border-radius: 12px; 
+            font-size: 14px; 
+            font-weight: 700; 
+            color: #475569; 
+            cursor: pointer; 
+            transition: all 0.2s ease; 
+            background-color: #fff; 
+            text-align: left; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        }
+        .card-option:hover { 
+            border-color: #cbd5e1; 
+            background-color: #f8fafc; 
+        }
         
-        button { width: 100%; background-color: #25D366; color: white; border: none; padding: 14px; font-size: 15px; font-weight: 700; border-radius: 6px; cursor: pointer; transition: background 0.3s; margin-top: 10px; }
-        button:hover { background-color: #128C7E; }
-        .secure-note { text-align: center; font-size: 11px; color: #a0aec0; margin-top: 15px; }
+        /* SEWAKTU OPSI DIPILIH */
+        .card-option.selected { 
+            border-color: #2563eb; 
+            background-color: #eff6ff; 
+            color: #1e40af; 
+            box-shadow: 0 4px 12px rgba(37,99,235,0.08); 
+        }
+        .card-option .radio-dot { 
+            width: 16px; 
+            height: 16px; 
+            border: 2px solid #cbd5e1; 
+            border-radius: 50%; 
+            display: inline-block; 
+            position: relative; 
+            flex-shrink: 0; 
+        }
+        .card-option.selected .radio-dot { 
+            border-color: #2563eb; 
+            background-color: #2563eb; 
+        }
+        .card-option.selected .radio-dot::after { 
+            content: ""; 
+            width: 6px; 
+            height: 6px; 
+            background: #fff; 
+            border-radius: 50%; 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+        }
+
+        /* INPUT HIDDEN UNTUK VALIDASI SYSTEM BROWSER */
+        .hidden-required-input { 
+            opacity: 0; 
+            width: 100%; 
+            height: 0; 
+            position: absolute; 
+            bottom: 0; 
+            left: 0; 
+            pointer-events: none; 
+            display: block !important; 
+        }
+
+        button.btn-submit { 
+            width: 100%; 
+            background-color: #16a34a; 
+            color: white; 
+            border: none; 
+            padding: 16px; 
+            font-size: 15px; 
+            font-weight: 800; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            margin-top: 15px; 
+            box-shadow: 0 4px 12px rgba(22,163,74,0.2); 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+        }
+        button.btn-submit:hover { 
+            background-color: #15803d; 
+            transform: translateY(-1px); 
+        }
+        button.btn-submit:active { 
+            transform: translateY(1px); 
+        }
+        .secure-note { 
+            text-align: center; 
+            font-size: 11px; 
+            color: #94a3b8; 
+            margin-top: 18px; 
+            font-weight: 500; 
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Formulir Akses Prioritas</h2>
-    <p class="subtitle">Isi data di bawah untuk mendapatkan Brosur Resmi, Pricelist, dan Jadwal Survei Eksklusif.</p>
+    <h2>Akses Unit &amp; Promo Resmi</h2>
+    <p class="subtitle">Pilih preferensi Anda dalam 10 detik untuk mengamankan Price List, E-Brochure, dan diskon kuota terbatas.</p>
     
     <form id="propertyForm" onsubmit="sendToWhatsapp(event)">
+
+        <!-- PERTANYAAN 1: TARGET HARGA RUMAH -->
         <div class="form-group">
-            <label for="nama">Nama</label>
-            <input type="text" id="nama" placeholder="Contoh: fauzi" required>
+            <label>Berapa harga rumah yang Anda inginkan?</label>
+            <div class="card-selector" id="group-budget">
+                <div class="card-option" onclick="selectCard('budget', 'Di bawah 1 Miliar', this)">
+                    <span class="radio-dot"></span> 💳 Di bawah Rp 1 Miliar
+                </div>
+                <div class="card-option" onclick="selectCard('budget', '1 Miliar - 1.5 Miliar', this)">
+                    <span class="radio-dot"></span> 🏠 Rp 1 Miliar - Rp 1.5 Miliar
+                </div>
+                <div class="card-option" onclick="selectCard('budget', '1.5 Miliar - 2.5 Miliar', this)">
+                    <span class="radio-dot"></span> 💎 Rp 1.5 Miliar - Rp 2.5 Miliar
+                </div>
+                <div class="card-option" onclick="selectCard('budget', 'Di atas 2.5 Miliar', this)">
+                    <span class="radio-dot"></span> 🏰 Di atas Rp 2.5 Miliar
+                </div>
+            </div>
+            <input type="text" id="budget" required class="hidden-required-input" oninvalid="this.setCustomValidity('Pilih salah satu target harga rumah')" oninput="this.setCustomValidity('')">
         </div>
 
+        <!-- PERTANYAAN 2: METODE BAYAR -->
         <div class="form-group">
-            <label for="budget">Alokasi Budget Pembelian</label>
-            <select id="budget" required>
-                <option value="" disabled selected>Pilih Range Budget</option>
-                <option value="Di bawah 1 Miliar">Di bawah Rp 1 Miliar</option>
-                <option value="1 Miliar - 1.5 Miliar">Rp 1 Miliar - Rp 1.5 Miliar</option>
-                <option value="1.5 Miliar - 2.5 Miliar">Rp 1.5 Miliar - Rp 2.5 Miliar</option>
-                <option value="Di atas 2.5 Miliar">Di atas Rp 2.5 Miliar</option>
-            </select>
+            <label>Bagaimana rencana Anda mengamankan unit ini?</label>
+            <div class="card-selector" id="group-metode">
+                <div class="card-option" onclick="selectCard('metode', 'KPR Express', this)">
+                    <span class="radio-dot"></span> 🏦 KPR Bank (Mau dibantu cari bunga murah)
+                </div>
+                <div class="card-option" onclick="selectCard('metode', 'Cash Bertahap', this)">
+                    <span class="radio-dot"></span> 🗓️ Cash Bertahap Langsung ke Developer
+                </div>
+                <div class="card-option" onclick="selectCard('metode', 'Cash Keras', this)">
+                    <span class="radio-dot"></span> 💵 Cash Keras (Lunas Instan &amp; Diskon Besar)
+                </div>
+            </div>
+            <input type="text" id="metode" required class="hidden-required-input" oninvalid="this.setCustomValidity('Pilih salah satu metode pembayaran')" oninput="this.setCustomValidity('')">
         </div>
 
+        <!-- PERTANYAAN 3: TIMELINE SURVEI -->
         <div class="form-group">
-            <label for="metode">Rencana Metode Pembayaran</label>
-            <select id="metode" required>
-                <option value="" disabled selected>Pilih Metode</option>
-                <option value="KPR Express">KPR (Kredit Pemilikan Rumah)</option>
-                <option value="Cash Bertahap">Cash Bertahap ke Developer</option>
-                <option value="Cash Keras">Cash Keras / Lunas Langsung</option>
-            </select>
+            <label>Kapan rencana agenda survei / keputusan Anda?</label>
+            <div class="card-selector" id="group-timeline">
+                <div class="card-option" onclick="selectCard('timeline', 'Bulan Ini (Urgensi Tinggi)', this)">
+                    <span class="radio-dot"></span> 🚀 Bulan Ini (Siap amankan unit jika cocok)
+                </div>
+                <div class="card-option" onclick="selectCard('timeline', '1 - 3 Bulan Ke Depan', this)">
+                    <span class="radio-dot"></span> ⏳ 1 - 3 Bulan Ke Depan
+                </div>
+                <div class="card-option" onclick="selectCard('timeline', 'Hanya Komparasi / Tahun Depan', this)">
+                    <span class="radio-dot"></span> 🔍 Masih komparasi / cari referensi dulu
+                </div>
+            </div>
+            <input type="text" id="timeline" required class="hidden-required-input" oninvalid="this.setCustomValidity('Pilih target timeline keputusan Anda')" oninput="this.setCustomValidity('')">
         </div>
 
-        <div class="form-group">
-            <label for="timeline">Target Keputusan Pembelian</label>
-            <select id="timeline" required>
-                <option value="" disabled selected>Pilih Waktu</option>
-                <option value="Bulan Ini (Urgensi Tinggi)">Bulan Ini (Siap Booking jika cocok)</option>
-                <option value="1 - 3 Bulan Ke Depan">1 - 3 Bulan Ke Depan</option>
-                <option value="Hanya Komparasi / Tahun Depan">Masih Lihat-lihat / Komparasi</option>
-            </select>
-        </div>
-
-        <button type="submit">
-            Dapatkan Brosur via WhatsApp
+        <!-- BUTTON SUBMIT -->
+        <button type="submit" class="btn-submit">
+            Dapatkan E-Brochure &amp; Pricelist via WA 🚀
         </button>
     </form>
     
-    <p class="secure-note">🔒 Data Anda aman dan hanya digunakan untuk verifikasi internal instansi kami.</p>
+    <p class="secure-note">🔒 Privasi terjamin. Data Anda langsung terenkripsi ke admin resmi proyek.</p>
 </div>
 
 <script>
+function selectCard(inputId, value, element) {
+    const targetInput = document.getElementById(inputId);
+    targetInput.value = value;
+    targetInput.setCustomValidity(''); 
+    
+    const parent = element.parentElement;
+    const options = parent.getElementsByClassName('card-option');
+    for (let option of options) {
+        option.classList.remove('selected');
+    }
+    
+    element.classList.add('selected');
+}
+
 function sendToWhatsapp(event) {
     event.preventDefault();
     
-    // Nomor WhatsApp lo (Sudah Terpasang)
     const nomorWA = "628170102779"; 
-    
-    // URL Web App Google Apps Script lo (Sudah Terpasang)
     const urlGoogleScript = "https://script.google.com/macros/s/AKfycbzWZfpOvWnMeyzR0YetoB3is_1YIe_NGl2cgAyieuvMg9kSDRBdm7P4CahEipWgXtFW/exec"; 
     
-    // Mengambil data inputan user
-    const nama = document.getElementById('nama').value;
+    // Otomatis "Client LP" biar baris Sheet lo gak error/patah
+    const nama = "Client LP"; 
     const budget = document.getElementById('budget').value;
     const metode = document.getElementById('metode').value;
     const timeline = document.getElementById('timeline').value;
     
-    // Teks cetakan untuk di-send ke WhatsApp
-    const teks = `Halo Partner Investasi,%0A%0ASaya sudah mengisi data:%0A%0A` +
-                 `• *Nama:* ${nama}%0A` +
-                 `• *Budget:* ${budget}%0A` +
+    const teks = `Halo Partner Investasi,%0A%0ASaya sudah mengisi data preferensi KPR:%0A%0A` +
+                 `• *Target Harga:* ${budget}%0A` +
                  `• *Metode Bayar:* ${metode}%0A` +
                  `• *Target Pembelian:* ${timeline}%0A%0A` +
                  `Mohon kirimkan dokumen Pricelist dan sisa unit prioritasnya. Terima kasih.`;
 
-    // Bungkus data ke dalam format FormData
     const formData = new FormData();
     formData.append('nama', nama);
     formData.append('budget', budget);
     formData.append('metode', metode);
     formData.append('timeline', timeline);
 
-    // Kirim data ke Google Sheets di background (Asynchronous)
     fetch(urlGoogleScript, { method: 'POST', body: formData })
     .then(response => {
-        // Sukses kirim ke sheet -> langsung lempar ke WA
         window.location.href = `https://api.whatsapp.com/send?phone=${nomorWA}&text=${teks}`;
     })
     .catch(error => {
-        // Jika internet user lemot/gagal konek ke Google, tetep paksa lempar ke WA biar lead gak hilang
         window.location.href = `https://api.whatsapp.com/send?phone=${nomorWA}&text=${teks}`;
     });
 }
