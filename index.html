@@ -30,12 +30,12 @@
     
     <form id="propertyForm" onsubmit="sendToWhatsapp(event)">
         <div class="form-group">
-            <label for="nama">Nama Lengkap</label>
-            <input type="text" id="nama" placeholder="Contoh: Ahmad Fauzi" required>
+            <label for="nama">Nama</label>
+            <input type="text" id="nama" placeholder="Contoh: fauzi" required>
         </div>
 
         <div class="form-group">
-            <label for="budget">Estimasi Budget Pembelian</label>
+            <label for="budget">Alokasi Budget Pembelian</label>
             <select id="budget" required>
                 <option value="" disabled selected>Pilih Range Budget</option>
                 <option value="Di bawah 1 Miliar">Di bawah Rp 1 Miliar</option>
@@ -51,7 +51,7 @@
                 <option value="" disabled selected>Pilih Metode</option>
                 <option value="KPR Express">KPR (Kredit Pemilikan Rumah)</option>
                 <option value="Cash Bertahap">Cash Bertahap ke Developer</option>
-                <option value="Cash Keras">Cash Keras / Lunasi Langsung</option>
+                <option value="Cash Keras">Cash Keras / Lunas Langsung</option>
             </select>
         </div>
 
@@ -90,7 +90,7 @@ function sendToWhatsapp(event) {
     const timeline = document.getElementById('timeline').value;
     
     // Teks cetakan untuk di-send ke WhatsApp
-    const teks = `Halo Partner Investasi,%0A%0ASaya sudah mengisi data verifikasi di Landing Page:%0A%0A` +
+    const teks = `Halo Partner Investasi,%0A%0ASaya sudah mengisi data:%0A%0A` +
                  `• *Nama:* ${nama}%0A` +
                  `• *Budget:* ${budget}%0A` +
                  `• *Metode Bayar:* ${metode}%0A` +
